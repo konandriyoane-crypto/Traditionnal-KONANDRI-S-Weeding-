@@ -140,26 +140,64 @@ h3{font-weight:600;line-height:1.3;}
 .story blockquote{margin:36px auto;border-left:4px solid var(--rosey);padding:16px 0 16px 26px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.4rem;color:var(--deep-blush);line-height:1.8;}
 .story blockquote cite{display:block;margin-top:12px;font-size:.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--rosey);font-style:normal;font-weight:600;}
 
-/* ── GALERIE AMÉLIORÉE ── */
+/* ─── GALERIE CINÉMATIQUE ─── */
 .gallery-section{padding:80px 24px;background:var(--cream);}
-.gallery-container{max-width:1000px;margin:0 auto;}
+.gallery-container{max-width:1200px;margin:0 auto;}
 
+/* Grille asymétrique élégante */
 .gallery-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
-  gap:20px;
+  grid-template-columns:repeat(4,1fr);
+  grid-auto-rows:280px;
+  gap:24px;
   margin-top:40px;
+}
+
+/* Images clés agrandies */
+.grid-item:nth-child(1) {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.grid-item:nth-child(3) {
+  grid-column: span 2;
+}
+
+.grid-item:nth-child(5) {
+  grid-column: span 2;
 }
 
 .grid-item{
   position:relative;
   overflow:hidden;
-  border-radius:12px;
-  border:2px solid rgba(242,107,168,.15);
-  box-shadow:0 8px 32px rgba(31,26,23,0.08);
-  transition:all .3s cubic-bezier(.2,.8,.2,1);
-  aspect-ratio:1;
+  border-radius:16px;
+  border:2px solid rgba(242,107,168,.12);
+  box-shadow:0 12px 40px rgba(31,26,23,0.12);
   cursor:pointer;
+  transition:all .4s cubic-bezier(.34,1.56,.64,1);
+  
+  /* Fade-in initial */
+  opacity:0;
+  transform:translateY(30px) scale(0.95);
+}
+
+/* Animation fade-in staggerée */
+.grid-item:nth-child(1) { animation: cinemaFadeIn 0.7s cubic-bezier(.34,1.56,.64,1) forwards 0s; }
+.grid-item:nth-child(2) { animation: cinemaFadeIn 0.7s cubic-bezier(.34,1.56,.64,1) forwards 0.1s; }
+.grid-item:nth-child(3) { animation: cinemaFadeIn 0.7s cubic-bezier(.34,1.56,.64,1) forwards 0.2s; }
+.grid-item:nth-child(4) { animation: cinemaFadeIn 0.7s cubic-bezier(.34,1.56,.64,1) forwards 0.3s; }
+.grid-item:nth-child(5) { animation: cinemaFadeIn 0.7s cubic-bezier(.34,1.56,.64,1) forwards 0.4s; }
+.grid-item:nth-child(6) { animation: cinemaFadeIn 0.7s cubic-bezier(.34,1.56,.64,1) forwards 0.5s; }
+
+@keyframes cinemaFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .grid-item img{
@@ -167,46 +205,115 @@ h3{font-weight:600;line-height:1.3;}
   height:100%;
   object-fit:cover;
   display:block;
-  transition:transform .35s ease;
+  transition:transform .5s cubic-bezier(.34,1.56,.64,1);
 }
 
-.grid-item:hover img{
-  transform:scale(1.08) rotate(0.5deg);
+/* Parallaxe au scroll */
+.grid-item.parallax-1 img { transform: translateY(0px); }
+.grid-item.parallax-2 img { transform: translateY(0px); }
+.grid-item.parallax-3 img { transform: translateY(0px); }
+
+/* Hover effects */
+.grid-item:hover {
+  transform:translateY(-16px);
+  box-shadow:0 28px 64px rgba(242,107,168,.25);
+  border-color:rgba(242,107,168,.4);
 }
 
-.grid-item:hover{
-  transform:translateY(-12px);
-  box-shadow:0 20px 48px rgba(242,107,168,.2);
-  border-color:rgba(242,107,168,.35);
+.grid-item:hover img {
+  transform:scale(1.08);
 }
 
 .grid-item:focus{
   outline:3px solid rgba(242,107,168,.4);
-  outline-offset:2px;
+  outline-offset:4px;
 }
 
-/* caption overlay on hover */
+/* Overlay gradient */
 .grid-item .overlay{
   position:absolute;
-  left:16px;
-  right:16px;
-  bottom:16px;
-  padding:12px 14px;
-  background:linear-gradient(180deg,rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 100%);
+  inset:0;
+  background:linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,.6) 100%);
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  justify-content:flex-end;
+  padding:24px;
   color:#fff;
-  border-radius:6px;
-  font-size:.85rem;
-  display:none;
+  opacity:0;
+  transition:opacity .4s ease;
+}
+
+.grid-item:hover .overlay,
+.grid-item:focus .overlay {
+  opacity:1;
+}
+
+.grid-item .overlay span {
+  font-size:.9rem;
   font-weight:500;
-  letter-spacing:0.5px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  animation:slideUp .5s cubic-bezier(.34,1.56,.64,1) forwards;
 }
 
-.grid-item:focus .overlay, .grid-item:hover .overlay{
-  display:block;
-  animation:fadeIn .25s ease;
+@keyframes slideUp {
+  from {
+    opacity:0;
+    transform:translateY(15px);
+  }
+  to {
+    opacity:1;
+    transform:translateY(0);
+  }
 }
 
-@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+/* ── RESPONSIVE GALERIE ── */
+@media(max-width:1024px){
+  .gallery-grid{
+    grid-template-columns:repeat(3,1fr);
+    grid-auto-rows:240px;
+  }
+  
+  .grid-item:nth-child(1) {
+    grid-column: span 2;
+    grid-row: span 1;
+  }
+  
+  .grid-item:nth-child(3) {
+    grid-column: span 1;
+  }
+  
+  .grid-item:nth-child(5) {
+    grid-column: span 2;
+  }
+}
+
+@media(max-width:768px){
+  .gallery-grid{
+    grid-template-columns:repeat(2,1fr);
+    grid-auto-rows:200px;
+    gap:16px;
+  }
+  
+  .grid-item:nth-child(1),
+  .grid-item:nth-child(3),
+  .grid-item:nth-child(5) {
+    grid-column: span 1;
+  }
+}
+
+@media(max-width:600px){
+  .gallery-grid{
+    grid-template-columns:1fr;
+    grid-auto-rows:260px;
+    gap:16px;
+  }
+  
+  .grid-item{
+    border-radius:12px;
+  }
+}
 
 /* ── INFOS ── */
 .infos-grid{
@@ -445,9 +552,6 @@ footer p{
 
 /* ── RESPONSIVE ── */
 @media(max-width:900px){
-  .gallery-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
   .infos-grid{
     grid-template-columns:1fr;
   }
@@ -467,10 +571,6 @@ footer p{
 }
 
 @media(max-width:600px){
-  .gallery-grid{
-    grid-template-columns:1fr;
-    gap:16px;
-  }
   .hero{
     padding:48px 16px;
   }
@@ -663,7 +763,7 @@ footer p{
   <div class="divider-symbol">✦ 🌺 ✦</div>
 </div>
 
-<!-- GALERIE -->
+<!-- GALERIE CINÉMATIQUE -->
 <div class="gallery-section">
 <div class="gallery-container">
   <div class="sec">
@@ -672,34 +772,34 @@ footer p{
   </div>
   
   <div class="gallery-grid" id="ts-gallery">
-    <a href="DSC03430.jpg" class="grid-item" data-glightbox="title:Yoane et Marie-Aude" aria-label="Ouvrir l'image 1">
+    <a href="DSC03430.jpg" class="grid-item parallax-1" data-glightbox="title:Yoane et Marie-Aude" aria-label="Ouvrir l'image 1">
       <img src="DSC03430.jpg" alt="Yoane et Marie-Aude" loading="lazy">
-      <div class="overlay" aria-hidden="true">Yoane & Marie-Aude</div>
+      <div class="overlay"><span>Yoane & Marie-Aude</span></div>
     </a>
 
-    <a href="DSC03437.jpg" class="grid-item" data-glightbox="title:Yoane et Marie-Aude" aria-label="Ouvrir l'image 2">
+    <a href="DSC03437.jpg" class="grid-item parallax-2" data-glightbox="title:Portrait du couple" aria-label="Ouvrir l'image 2">
       <img src="DSC03437.jpg" alt="Portrait du couple" loading="lazy">
-      <div class="overlay" aria-hidden="true">Portrait</div>
+      <div class="overlay"><span>Portrait</span></div>
     </a>
 
-    <a href="DSC03489.jpg" class="grid-item" data-glightbox="title:Yoane et Marie-Aude" aria-label="Ouvrir l'image 3">
+    <a href="DSC03489.jpg" class="grid-item parallax-3" data-glightbox="title:Joie partagée" aria-label="Ouvrir l'image 3">
       <img src="DSC03489.jpg" alt="Rires partagés" loading="lazy">
-      <div class="overlay" aria-hidden="true">Joie</div>
+      <div class="overlay"><span>Joie</span></div>
     </a>
 
-    <a href="stream-2085756428.jpeg" class="grid-item" data-glightbox="title:Yoane et Marie-Aude" aria-label="Ouvrir l'image 4">
+    <a href="stream-2085756428.jpeg" class="grid-item parallax-1" data-glightbox="title:Moment spécial" aria-label="Ouvrir l'image 4">
       <img src="stream-2085756428.jpeg" alt="Moment spécial" loading="lazy">
-      <div class="overlay" aria-hidden="true">Moment</div>
+      <div class="overlay"><span>Moment</span></div>
     </a>
 
-    <a href="stream1820568233.jpeg" class="grid-item" data-glightbox="title:Yoane et Marie-Aude" aria-label="Ouvrir l'image 5">
+    <a href="stream1820568233.jpeg" class="grid-item parallax-2" data-glightbox="title:Souvenirs précieux" aria-label="Ouvrir l'image 5">
       <img src="stream1820568233.jpeg" alt="Souvenirs" loading="lazy">
-      <div class="overlay" aria-hidden="true">Souvenirs</div>
+      <div class="overlay"><span>Souvenirs</span></div>
     </a>
 
-    <a href="stream857808981.jpeg" class="grid-item" data-glightbox="title:Yoane et Marie-Aude" aria-label="Ouvrir l'image 6">
+    <a href="stream857808981.jpeg" class="grid-item parallax-3" data-glightbox="title:Complicité" aria-label="Ouvrir l'image 6">
       <img src="stream857808981.jpeg" alt="Complicité" loading="lazy">
-      <div class="overlay" aria-hidden="true">Complicité</div>
+      <div class="overlay"><span>Complicité</span></div>
     </a>
   </div>
 </div>
@@ -809,6 +909,37 @@ function tick(){
   document.getElementById('cd-s').textContent=String(Math.floor(d%60000/1000)).padStart(2,'0');
 }
 tick();setInterval(tick,1000);
+
+// PARALLAXE CINÉMATIQUE
+const galleryItems = document.querySelectorAll('.grid-item');
+const observerOptions = {
+  threshold: 0.3,
+  rootMargin: '0px 0px -100px 0px'
+};
+
+const parallaxObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const img = entry.target.querySelector('img');
+      const rect = entry.target.getBoundingClientRect();
+      const centerY = window.innerHeight / 2;
+      const elementY = rect.top;
+      const distance = centerY - elementY;
+      
+      // Parallaxe effect: -0.3 speed pour mouvement inverse
+      const parallaxClass = entry.target.className.match(/parallax-\d/)[0];
+      if (parallaxClass === 'parallax-1') {
+        img.style.transform = `translateY(${distance * 0.15}px)`;
+      } else if (parallaxClass === 'parallax-2') {
+        img.style.transform = `translateY(${distance * -0.1}px)`;
+      } else {
+        img.style.transform = `translateY(${distance * 0.2}px)`;
+      }
+    }
+  });
+}, observerOptions);
+
+galleryItems.forEach(item => parallaxObserver.observe(item));
 
 // GLightbox init
 const lightbox = GLightbox({
